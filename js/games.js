@@ -13,14 +13,22 @@ const game6 = {name: "GTA V", type: "Open world", rating: 5, Favourite: true}
 const game7 = {name: "Gran Turismo", type: "Car", rating: 6, Favourite: true}
 
 const games = [game1, game2, game3, game4, game5, game6, game7]
+const [first, second] = games
 
+const friendGame1 =  {name: "Minecraft", type: "Open World", rating: 5, Favourite: true}
+
+const friendGame2 = {name: "Tetris", type: "Puzzle", rating: 5, Favourite: false}
+
+const friendGames = [ friendGame1, friendGame2]
+
+const allGames = [...games, ...friendGames]
 
 const toString = (game) => {
     return `Name: ${game.name} - Type: ${game.type} - Rating: ${game.rating} - Favourite: ${game.Favourite}`
 }
 
-const printAllGames = () => {
-    for (const game of games) {
+const printAllGames = (gameArray) => {
+    for (const game of gameArray) {
     addStatus(toString(game))
     }
 }
@@ -38,23 +46,10 @@ const avgrating = getAverageRating()
 
 const getHighestRating = () => {
     let highestRated = game1;
-    if(highestRated.rating < game2.rating){
-        highestRated = game2
+    for (const game of games) {
+        if (game.rating > highestRated.rating) {
+            highestRated = game
     }
-    if(highestRated.rating < game3.rating){
-        highestRated = game3
-    }
-    if(highestRated.rating < game4.rating){
-        highestRated = game4
-    }
-    if(highestRated.rating < game5.rating){
-        highestRated = game5
-    }
-    if(highestRated.rating < game7.rating){
-        highestRated = game6
-    }
-    if(highestRated.rating < game7.rating){
-        highestRated = game7
     }
     return highestRated
 } 
@@ -64,22 +59,22 @@ const isFavourite = (game) => {
     return game.Favourite
 }
 
-printAllGames()
-
-addStatus('<h2>My Favourites ...</h2>');
-
+addStatus('<h2>My own games</h2>');
+printAllGames(games)
+addStatus('<h2>These are all of the favourite games in the library</h2>');
 const printFavouriteGames = () => {
-    isFavourite(game1) ? addStatus(`${game1.name}`) : null;
-    isFavourite(game2) ? addStatus(`${game2.name}`) : null;
-    isFavourite(game3) ? addStatus(`${game3.name}`) : null;
-    isFavourite(game4) ? addStatus(`${game4.name}`) : null;
-    isFavourite(game5) ? addStatus(`${game5.name}`) : null;
-    isFavourite(game4) ? addStatus(`${game6.name}`) : null;
-    isFavourite(game5) ? addStatus(`${game7.name}`) : null;
+    for (const game of games) {
+    isFavourite(game) ? addStatus(`${game.name}`) : null;
+    }
 }
-
 printFavouriteGames()
-
 addStatus('<h2>Some statistics ...</h2>');
 addStatus(`Average of all games: ${avgrating}`)
 addStatus(`${highestRatedGame.name} is the game with the highest rating: ${highestRatedGame.rating}`)
+addStatus('<h2>My first 2 games are </h2>');
+addStatus(`${first.name}`)
+addStatus(`${second.name}`)
+addStatus("<h2>My best friend's games </h2>");
+printAllGames(friendGames)
+addStatus("<h2>All the games in our library:</h2>");
+printAllGames(allGames)
