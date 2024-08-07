@@ -28,46 +28,48 @@ const toString = (game) => {
 }
 
 const printAllGames = (gameArray) => {
-    for (const game of gameArray) {
+    gameArray.forEach((game) => {
     addStatus(toString(game))
-    }
+    });
 }
 
-const getAverageRating = () => {
+const getAverageRating = (gameArray) => {
     let sum = 0
-    for (const game of games) {
-        sum += game.rating;
-    }
-    return (sum / games.length).toFixed(1);
-
+    gameArray.forEach((game) => {
+        sum += game.rating
+    });
+    
+    return (sum / gameArray.length).toFixed(1);
 }
-const avgrating = getAverageRating()
+let avgrating = getAverageRating(games)
 
 
-const getHighestRating = () => {
-    let highestRated = game1;
-    for (const game of games) {
+const getHighestRating = (gameArray) => {
+    let highestRated = gameArray[0];
+    gameArray.forEach((game) => {
         if (game.rating > highestRated.rating) {
-            highestRated = game
-    }
-    }
+            highestRated = game 
+        }
+    });
+
     return highestRated
 } 
-const highestRatedGame = getHighestRating()
+const highestRatedGame = getHighestRating(games)
 
 const isFavourite = (game) => {
     return game.Favourite
 }
 
+const printFavouriteGames = (gamesArray) => {
+    gamesArray.forEach((game) => {
+    isFavourite(game) ? addStatus(`${game.name}`) : null;
+    });
+}
+
 addStatus('<h2>My own games</h2>');
 printAllGames(games)
 addStatus('<h2>These are all of the favourite games in the library</h2>');
-const printFavouriteGames = () => {
-    for (const game of games) {
-    isFavourite(game) ? addStatus(`${game.name}`) : null;
-    }
-}
-printFavouriteGames()
+printFavouriteGames(games)
 addStatus('<h2>Some statistics ...</h2>');
 addStatus(`Average of all games: ${avgrating}`)
 addStatus(`${highestRatedGame.name} is the game with the highest rating: ${highestRatedGame.rating}`)
