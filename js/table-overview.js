@@ -33,28 +33,30 @@ h2party.addEventListener("click", () => {
 const statusHeader = document.createElement('h3');
 
 
-const renderGames = (games) => {
+const renderGames = (games, filterFunction) => {
     const tableBody = document.querySelector("#my-games-table-body");
+    clearTableRows({ tableBody: 'my-games-table-body' });
 
-    
-    games.forEach((game) => {
-      const tableRow = document.createElement("tr");
-      
-      addTableCell({ tableRow, value: game.name });
-      addTableCell({ tableRow, value: game.type });
-      addTableCell({ tableRow, value: game.rating });
-      
-      tableRow.addEventListener("click", () => {
-        clearStatus();
-        const statusHeader = document.createElement('h3');
-        statusHeader.textContent = 'Status';
-        document.getElementById("status").appendChild(statusHeader);
-        addStatus(toString(game));
-      });
-      
-      tableBody.appendChild(tableRow);
+    const filteredGames = filterFunction ? games.filter(filterFunction) : games;
+
+    filteredGames.forEach((game) => {
+        const tableRow = document.createElement("tr");
+        addTableCell({ tableRow, value: game.name });
+        addTableCell({ tableRow, value: game.type });
+        addTableCell({ tableRow, value: game.rating });
+
+        tableRow.addEventListener("click", () => {
+            clearStatus();
+            const statusHeader = document.createElement('h3');
+            statusHeader.textContent = 'Status';
+            document.getElementById("status").appendChild(statusHeader);
+            addStatus(toString(game));
+        });
+
+        tableBody.appendChild(tableRow);
     });
-  };
+};
+
 statusHeader.textContent = 'Status';
 
 statusDiv.appendChild(statusHeader);
@@ -62,3 +64,21 @@ statusDiv.appendChild(statusHeader);
 document.querySelector('main').appendChild(statusDiv);
 
 renderGames(games)
+
+document.querySelector("#show-favourites").addEventListener("click", () => {
+    renderGames(games, game => game.Favourite);
+});
+
+document.querySelector("#show-all").addEventListener("click", () => {
+    renderGames(games);
+});
+
+document.querySelector("#rating-field").addEventListener("input", (event) => {
+    const rating = parseFloat(event.target.value);
+    if (isNaN(rating)) {
+        renderGames(games);
+    } else {
+        renderGames(games, game => game.rating > rating);
+    }
+});
+
