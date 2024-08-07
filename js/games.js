@@ -66,17 +66,25 @@ const printFavouriteGames = (gamesArray) => {
     .forEach((game) => addStatus(`${game.name}`));
 }
 
-addStatus('<h2>My own games</h2>');
+const printGamesRatingAbove = (gamesArray, rating) => {
+    addStatus(`<h2>These are all games with rating above ${rating}:</h2>`);
+    gamesArray
+        .filter((game) => game.rating > rating)
+        .forEach((game) => addStatus(toString(game)));
+};
+
+addStatus('<h2>My own games:</h2>');
 printAllGames(games)
-addStatus('<h2>These are all of the favourite games in the library</h2>');
+addStatus('<h2>These are all of the favourite games in the library:</h2>');
 printFavouriteGames(games)
 addStatus('<h2>Some statistics ...</h2>');
 addStatus(`Average of all games: ${avgrating}`)
 addStatus(`${highestRatedGame.name} is the game with the highest rating: ${highestRatedGame.rating}`)
-addStatus('<h2>My first 2 games are </h2>');
+addStatus('<h2>My first 2 games are: </h2>');
 addStatus(`${first.name}`)
 addStatus(`${second.name}`)
-addStatus("<h2>My best friend's games </h2>");
+addStatus("<h2>My best friend's games: </h2>");
 printAllGames(friendGames)
 addStatus("<h2>All the games in our library:</h2>");
 printAllGames(allGames)
+printGamesRatingAbove(games, 3);
