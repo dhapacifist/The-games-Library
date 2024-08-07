@@ -8,7 +8,7 @@ const game4 = {name: "Horizon Forbidden West", type: "Adventure", rating: 3.5, F
 
 const game5 = {name: "Pokemon legends: Arceus", type: "RPG", rating: 3, Favourite: true}
 
-const game6 = {name: "GTA V", type: "Open world", rating: 5, Favourite: true}
+const game6 = {name: "GTA V", type: "Open World", rating: 5, Favourite: true}
 
 const game7 = {name: "Gran Turismo", type: "Car", rating: 6, Favourite: true}
 
@@ -73,18 +73,29 @@ const printGamesRatingAbove = (gamesArray, rating) => {
         .forEach((game) => addStatus(toString(game)));
 };
 
+const filterAndPrintGames = (games, customFilter) => {
+    games
+    .filter(customFilter)
+    .forEach((game) => addStatus(toString(game)));
+  };
+
+
 addStatus('<h2>My own games:</h2>');
-printAllGames(games)
+printAllGames(games);
 addStatus('<h2>These are all of the favourite games in the library:</h2>');
-printFavouriteGames(games)
+printFavouriteGames(games);
 addStatus('<h2>Some statistics ...</h2>');
-addStatus(`Average of all games: ${avgrating}`)
-addStatus(`${highestRatedGame.name} is the game with the highest rating: ${highestRatedGame.rating}`)
+addStatus(`Average of all games: ${avgrating}`);
+addStatus(`${highestRatedGame.name} is the game with the highest rating: ${highestRatedGame.rating}`);
 addStatus('<h2>My first 2 games are: </h2>');
-addStatus(`${first.name}`)
-addStatus(`${second.name}`)
+addStatus(`${first.name}`);
+addStatus(`${second.name}`);
 addStatus("<h2>My best friend's games: </h2>");
-printAllGames(friendGames)
+printAllGames(friendGames);
 addStatus("<h2>All the games in our library:</h2>");
-printAllGames(allGames)
+printAllGames(allGames);
 printGamesRatingAbove(games, 3);
+addStatus("<h2>These are all the favorite games in the library:</h2>");
+filterAndPrintGames(allGames, (game) => game.Favourite);
+addStatus("<h2>These games have type 'Open World':</h2>");
+filterAndPrintGames(allGames, (game) => game.type === "Open World");
