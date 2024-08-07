@@ -19,7 +19,7 @@ const friendGame1 =  {name: "Minecraft", type: "Open World", rating: 5, Favourit
 
 const friendGame2 = {name: "Tetris", type: "Puzzle", rating: 5, Favourite: false}
 
-const friendGames = [ friendGame1, friendGame2]
+const friendGames = [friendGame1, friendGame2]
 
 const allGames = [...games, ...friendGames]
 
@@ -28,9 +28,9 @@ const toString = (game) => {
 }
 
 const printAllGames = (gameArray) => {
-    gameArray.forEach((game) => {
-    addStatus(toString(game))
-    });
+    gameArray
+        .map(toString)
+        .forEach(addStatus);
 }
 
 const getAverageRating = (gameArray) => {
