@@ -26,10 +26,12 @@ const printAllGames = () => {
 }
 
 const getAverageRating = () => {
+    let sum = 0
+    for (const game of games) {
+        sum += game.rating;
+    }
+    return (sum / games.length).toFixed(1);
 
-    const avgrating = (game1.rating + game2.rating + game3.rating + game4.rating + game5.rating + game6.rating + game7.rating) /7;
-
-    return avgrating
 }
 const avgrating = getAverageRating()
 
