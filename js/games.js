@@ -61,9 +61,9 @@ const isFavourite = (game) => {
 }
 
 const printFavouriteGames = (gamesArray) => {
-    gamesArray.forEach((game) => {
-    isFavourite(game) ? addStatus(`${game.name}`) : null;
-    });
+    gamesArray
+    .filter(isFavourite)
+    .forEach((game) => addStatus(`${game.name}`));
 }
 
 addStatus('<h2>My own games</h2>');
