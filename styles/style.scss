@@ -51,7 +51,7 @@ header {
 
 
 main {
-  text-align: center;
+  text-align: left;
   padding: 1em;
 
   h2 {
@@ -61,8 +61,8 @@ main {
 
   p {
     font-size: 1.2rem;
-    max-width: 40em;
-    margin: 0 auto;  // Center the text
+    max-width: 60em;
+    text-align: left;
   }
 }
 
