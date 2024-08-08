@@ -15,11 +15,11 @@ const addGame = () => {
         },
         body: JSON.stringify(game)
     });
-
+    clearStatus()
     addStatus(`Dit spel werd toegevoegd: ${game.name}`);
 };
 
-document.querySelector("#submit")
+document.querySelector("#add-game-form")
 .addEventListener("submit", (event) => {
     event.preventDefault();
     addGame();
