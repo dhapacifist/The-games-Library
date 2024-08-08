@@ -1,4 +1,5 @@
 let games = [];
+let showFavourites = false;
 
 const fetchGames = async () => {
     const response = await fetch("http://localhost:3000/games");
@@ -14,7 +15,7 @@ const searchByFetch = async (chars) => {
 };
 
 const toString = (game) => {
-    return `Name: ${game.name} - Type: ${game.type} - Rating: ${game.rating} - Favourite: ${game.Favourite}`;
+    return `Name: ${game.name} - Type: ${game.type} - Rating: ${game.rating} - Favourite: ${game.isFavourite}`;
 };
 
 const statusDiv = document.createElement('div');
@@ -32,16 +33,19 @@ h2party.addEventListener("click", () => {
 const statusHeader = document.createElement('h3');
 
 const renderGames = (games) => {
+    const searchField = document.querySelector("#search-field");
+    const searchQuery = searchField.value;
     const tableBody = document.querySelector("#my-games-table-body");
     clearTableRows({ tableBody: 'my-games-table-body' });
 
     if (games.length === 0) {
         hideTable();
-        document.querySelector("#status").textContent = 'No games available in the library.';
+        const statusMessage = searchQuery ? `No games available in the library with characters '${searchQuery}'.` : 'No games available in the library.';
+        document.querySelector("#status").textContent = statusMessage;
         return;
     }
-    displayTable()
     clearStatus()
+    displayTable()
 
     games.forEach((game) => {
         const tableRow = document.createElement("tr");
@@ -78,26 +82,25 @@ const fetchAndRenderGames = async () => {
     const rating = parseFloat(ratingField.value);
     const searchQuery = searchField.value;
 
-    if (searchQuery) {
-        const filteredGames = await searchByFetch(searchQuery);
-        renderGames(filteredGames);
-        document.querySelector('#table-caption').textContent = `Games with name containing '${searchQuery}'`;
-    } else if (!isNaN(rating)) {
-        const ratedGames = games.filter(game => game.rating > rating);
-        renderGames(ratedGames);
-    } else {
-        renderGames(games);
-    }
-};
+    let filteredGames = games;
 
-const searchByFetchAndRender = async (chars) => {
-    if (chars === '') {
-        fetchAndRenderGames();
+    if (searchQuery) {
+        filteredGames = await searchByFetch(searchQuery);
+        document.querySelector('#table-caption').textContent = `Games with name containing '${searchQuery}'`;
+    } else if (showFavourites) {
+
+        filteredGames = filteredGames.filter(game => game.isFavourite);
+        document.querySelector('#table-caption').textContent = `Favourite Games`;
     } else {
-        const filteredGames = await searchByFetch(chars);
-        renderGames(filteredGames);
-        document.querySelector('#table-caption').textContent = `Games with name containing '${chars}'`;
+
+        document.querySelector('#table-caption').textContent = `All games`;
     }
+
+    if (!isNaN(rating)) {
+        filteredGames = filteredGames.filter(game => game.rating > rating);
+    }
+
+    renderGames(filteredGames);
 };
 
 statusHeader.textContent = 'Status';
@@ -106,25 +109,24 @@ statusDiv.appendChild(statusHeader);
 
 document.querySelector('main').appendChild(statusDiv);
 
-fetchAndRenderGames();
+
 
 document.querySelector("#show-favourites").addEventListener("click", () => {
-    const favouriteGames = games.filter(game => game.Favourite);
-    renderGames(favouriteGames);
+    showFavourites = true;
+    fetchAndRenderGames();
 });
 
 document.querySelector("#show-all").addEventListener("click", () => {
+    showFavourites = false; 
     fetchAndRenderGames();
 });
+
 
 document.querySelector("#rating-field").addEventListener("input", () => {
     fetchAndRenderGames();
 });
 
-document.querySelector("#search-field").addEventListener("input", () => {
-    const searchQuery = document.querySelector("#search-field").value;
-    searchByFetchAndRender(searchQuery);
-});
+
 
 const toggleFavourite = async (game) => {
     await fetch(`http://localhost:3000/games/${game.id}/Favourite`, {
@@ -174,5 +176,5 @@ const displayTable = () => {
         table.classList.remove("hidden");
     }
 };
-
+fetchAndRenderGames();
 setInterval(fetchAndRenderGames, 1000);
