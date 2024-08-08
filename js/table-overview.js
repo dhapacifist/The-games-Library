@@ -39,6 +39,12 @@ const renderGames = (games, filterFunction) => {
 
     const filteredGames = filterFunction ? games.filter(filterFunction) : games;
 
+    if (filteredGames.length === 0) {
+        hideTable();
+        document.querySelector("#status").textContent = 'No games available in the library.';
+        return;
+    }
+
     filteredGames.forEach((game) => {
         const tableRow = document.createElement("tr");
         addTableCell({ tableRow, value: game.name });
@@ -138,4 +144,11 @@ const deleteGame = async (game) => {
     clearStatus()
     addStatus(`The game with the name ${game.name} is now deleted.`)
     fetchAndRenderGames();
+};
+
+const hideTable = () => {
+    const table = document.querySelector("table");
+    if (table) {
+        table.classList.add("hidden");
+    }
 };
