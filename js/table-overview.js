@@ -152,3 +152,5 @@ const hideTable = () => {
         table.classList.add("hidden");
     }
 };
+
+setInterval(fetchAndRenderGames, 1000);
