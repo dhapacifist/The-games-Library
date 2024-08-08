@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Games</title>
+    <link type="text/css" href="styles/style.css" rel="stylesheet" />
+    <script src="js/dom.js" defer></script>
+    <script src="js/table-overview.js" defer></script>
+    <script src="js/add-game.js" defer></script>
+    
+</head>
+<body>
+  <header>
+    <img src="./images/Reallogo.png" alt="Logo image of games" class="logo" />
+    <nav>
+      <ul>
+      <li>
+          <a href="index.html">Home</a>
+      </li>
+      <li>
+          <a href="overview.html">Overview</a>
+      </li>
+      <li>
+          <a href="table-overview.html">Table-overview</a>
+        </li>
+        <li class="actual">
+            <a href="add-game.html">Overview</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h2>Add a game</h2>
+    <form id="add-game-form">
+        <p>
+            <label for="name">Name:</label>
+
+            <input id="name" type="text" value="bb">
+        </p>
+        <p>
+            <label for="Type">Type:</label>
+
+            <input id="type" type="text" value="ann">
+        </p>
+        <p>
+            <label for="rating">RATING:</label>
+
+            <input id="rating" type="number" value="2" max="15" min="1">
+        </p>
+        <p>
+            <input id="submit" type="submit" value="Add Game" aria-label="submit">
+        </p>
+        </form>
+        <div id ="status"></div>
+  </main>
+  <footer>Bram Verrando: Front-end - 2024</footer>
+  </body>
+</html>
+
