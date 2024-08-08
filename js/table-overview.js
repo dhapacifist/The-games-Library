@@ -50,6 +50,7 @@ const fetchAndRenderGames = async () => {
         filteredGames = filteredGames.filter(game => game.rating > rating);
     }
 
+
     const tableBody = document.querySelector("#my-games-table-body");
     tableBody.innerHTML = "";
 
@@ -59,6 +60,10 @@ const fetchAndRenderGames = async () => {
         return;
     }
     displayTable();
+
+    if (document.getElementById("status").textContent.includes("No games available")) {
+        clearStatus();
+    }
 
     filteredGames.forEach((game) => {
         const tableRow = document.createElement("tr");
@@ -124,17 +129,15 @@ const deleteGame = async (game) => {
             "Content-Type": "application/json"
         }
     });
-    clearStatus();
     addStatus(`The game with the name ${game.name} is now deleted.`);
     fetchAndRenderGames();
 };
-
 
 const hideTable = () => document.querySelector("table").classList.add("hidden");
 
 const displayTable = () => {
     document.querySelector("table").classList.remove("hidden")
-    clearStatus()
+
 };
 
 fetchAndRenderGames();
