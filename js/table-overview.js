@@ -44,6 +44,7 @@ const renderGames = (games, filterFunction) => {
         addTableCell({ tableRow, value: game.name });
         addTableCell({ tableRow, value: game.type });
         addTableCell({ tableRow, value: game.rating });
+        tableRow.appendChild(createDeleteButton(game));
 
         tableRow.addEventListener("click", () => {
             clearStatus();
@@ -57,7 +58,7 @@ const renderGames = (games, filterFunction) => {
             toggleFavourite(game);
 
             clearStatus();
-            addStatus(`${game.name}'s favourite status has been updated.`);
+            addStatus(`The game with the name ${game.name} is now (not) my favourite.`);
         });
 
         tableBody.appendChild(tableRow);
@@ -104,7 +105,6 @@ document.querySelector("#fetch-games").addEventListener("click", () => {
     searchByFetchAndRender(searchQuery);
 });
 
-
 const toggleFavourite = async (game) => {
     await fetch(`http://localhost:3000/games/${game.id}/Favourite`, {
         method: "POST",
@@ -116,3 +116,26 @@ const toggleFavourite = async (game) => {
 
     fetchAndRenderGames();
 }
+
+const createDeleteButton = (game) => {
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => deleteGame(game));
+
+    const deleteCell = document.createElement("td");
+    deleteCell.appendChild(deleteButton);
+    return deleteCell;
+};
+
+const deleteGame = async (game) => {
+    await fetch(`http://localhost:3000/games/${game.id}`, {
+        method: "DELETE",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    });
+    clearStatus()
+    addStatus(`The game with the name ${game.name} is now deleted.`)
+    fetchAndRenderGames();
+};
