@@ -1,4 +1,4 @@
-const games = [];
+let games = [];
 
 const fetchGames = async () => {
     const response = await fetch("http://localhost:3000/games");
@@ -13,8 +13,6 @@ const searchByFetch = async (chars) => {
     return result;
 };
 
-
-
 const toString = (game) => {
     return `Name: ${game.name} - Type: ${game.type} - Rating: ${game.rating} - Favourite: ${game.Favourite}`;
 };
@@ -27,25 +25,25 @@ statusDiv.addEventListener("mouseout", () => statusDiv.removeAttribute("style"))
 
 const h2party = document.querySelector('h2');
 h2party.addEventListener("click", () => {
-  const randomizer = Math.floor(Math.random() * 360);
-  h2party.style.color = `hsl(${randomizer}, 100%, 50%)`;
+    const randomizer = Math.floor(Math.random() * 360);
+    h2party.style.color = `hsl(${randomizer}, 100%, 50%)`;
 });
 
 const statusHeader = document.createElement('h3');
 
-const renderGames = (games, filterFunction) => {
+const renderGames = (games) => {
     const tableBody = document.querySelector("#my-games-table-body");
     clearTableRows({ tableBody: 'my-games-table-body' });
 
-    const filteredGames = filterFunction ? games.filter(filterFunction) : games;
-
-    if (filteredGames.length === 0) {
+    if (games.length === 0) {
         hideTable();
         document.querySelector("#status").textContent = 'No games available in the library.';
         return;
     }
+    displayTable()
+    clearStatus()
 
-    filteredGames.forEach((game) => {
+    games.forEach((game) => {
         const tableRow = document.createElement("tr");
         addTableCell({ tableRow, value: game.name });
         addTableCell({ tableRow, value: game.type });
@@ -73,14 +71,35 @@ const renderGames = (games, filterFunction) => {
 
 const fetchAndRenderGames = async () => {
     await fetchGames();
-    renderGames(games);
+    
+    const ratingField = document.querySelector("#rating-field");
+    const searchField = document.querySelector("#search-field");
+
+    const rating = parseFloat(ratingField.value);
+    const searchQuery = searchField.value;
+
+    if (searchQuery) {
+        const filteredGames = await searchByFetch(searchQuery);
+        renderGames(filteredGames);
+        document.querySelector('#table-caption').textContent = `Games with name containing '${searchQuery}'`;
+    } else if (!isNaN(rating)) {
+        const ratedGames = games.filter(game => game.rating > rating);
+        renderGames(ratedGames);
+    } else {
+        renderGames(games);
+    }
 };
 
 const searchByFetchAndRender = async (chars) => {
-    const filteredGames = await searchByFetch(chars);
-    renderGames(filteredGames);
-    document.querySelector('#table-caption').textContent = `Games with name containing '${chars}'`;
+    if (chars === '') {
+        fetchAndRenderGames();
+    } else {
+        const filteredGames = await searchByFetch(chars);
+        renderGames(filteredGames);
+        document.querySelector('#table-caption').textContent = `Games with name containing '${chars}'`;
+    }
 };
+
 statusHeader.textContent = 'Status';
 
 statusDiv.appendChild(statusHeader);
@@ -90,23 +109,19 @@ document.querySelector('main').appendChild(statusDiv);
 fetchAndRenderGames();
 
 document.querySelector("#show-favourites").addEventListener("click", () => {
-    renderGames(games, game => game.Favourite);
+    const favouriteGames = games.filter(game => game.Favourite);
+    renderGames(favouriteGames);
 });
 
 document.querySelector("#show-all").addEventListener("click", () => {
-    renderGames(games);
+    fetchAndRenderGames();
 });
 
-document.querySelector("#rating-field").addEventListener("input", (event) => {
-    const rating = parseFloat(event.target.value);
-    if (isNaN(rating)) {
-        renderGames(games);
-    } else {
-        renderGames(games, game => game.rating > rating);
-    }
+document.querySelector("#rating-field").addEventListener("input", () => {
+    fetchAndRenderGames();
 });
 
-document.querySelector("#fetch-games").addEventListener("click", () => {
+document.querySelector("#search-field").addEventListener("input", () => {
     const searchQuery = document.querySelector("#search-field").value;
     searchByFetchAndRender(searchQuery);
 });
@@ -141,8 +156,8 @@ const deleteGame = async (game) => {
             "Content-Type": "application/json"
         }
     });
-    clearStatus()
-    addStatus(`The game with the name ${game.name} is now deleted.`)
+    clearStatus();
+    addStatus(`The game with the name ${game.name} is now deleted.`);
     fetchAndRenderGames();
 };
 
@@ -150,6 +165,13 @@ const hideTable = () => {
     const table = document.querySelector("table");
     if (table) {
         table.classList.add("hidden");
+    }
+};
+
+const displayTable = () => {
+    const table = document.querySelector("table");
+    if (table) {
+        table.classList.remove("hidden");
     }
 };
 
