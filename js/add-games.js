@@ -24,3 +24,4 @@ document.querySelector("#add-game-form")
     event.preventDefault();
     addGame();
 });
+

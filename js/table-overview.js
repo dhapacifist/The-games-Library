@@ -3,6 +3,7 @@ const games = [];
 const fetchGames = async () => {
     const response = await fetch("http://localhost:3000/games");
     const result = await response.json();
+    games.length = 0;
     games.push(...result);
 };
 
@@ -52,6 +53,13 @@ const renderGames = (games, filterFunction) => {
             addStatus(toString(game));
         });
 
+        tableRow.addEventListener("dblclick", () => {
+            toggleFavourite(game);
+
+            clearStatus();
+            addStatus(`${game.name}'s favourite status has been updated.`);
+        });
+
         tableBody.appendChild(tableRow);
     });
 };
@@ -95,3 +103,16 @@ document.querySelector("#fetch-games").addEventListener("click", () => {
     const searchQuery = document.querySelector("#search-field").value;
     searchByFetchAndRender(searchQuery);
 });
+
+
+const toggleFavourite = async (game) => {
+    await fetch(`http://localhost:3000/games/${game.id}/Favourite`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    });
+
+    fetchAndRenderGames();
+}
