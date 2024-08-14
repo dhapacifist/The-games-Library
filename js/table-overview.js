@@ -129,6 +129,7 @@ const deleteGame = async (game) => {
             "Content-Type": "application/json"
         }
     });
+    clearStatus()
     addStatus(`The game with the name ${game.name} is now deleted.`);
     fetchAndRenderGames();
 };

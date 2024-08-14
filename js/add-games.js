@@ -10,7 +10,7 @@ const addGame = async () => {
       return;
     }
     if (name.length < 2 || name.length > 64) {
-      addStatusError("The length of the name is invalid");
+      addStatusError("The length of the name is invalid.");
       return;
     }
     if (rating <= 0 || rating >= 11) {
@@ -49,5 +49,5 @@ document.querySelector("#add-game-form")
 });
 
 const addStatusError = (status) => {
-    document.getElementById("status").innerHTML = `<p style="color: red;">${status}</p>`;
+    document.querySelector("#status").innerHTML = `<p style="color: red;">${status}</p>`;
   };
